@@ -1,0 +1,10 @@
+export const LoginPage = () => {
+  return (
+    <main>
+      <h1>Login</h1>
+      <p>Login page placeholder</p>
+    </main>
+  );
+};
+
+export default LoginPage;
