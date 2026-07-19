@@ -1,3 +1,3 @@
 export * from "./gamesApi";
 export * from "./categoriesApi";
-export * from "./userApi";
+export * from "./authApi";
