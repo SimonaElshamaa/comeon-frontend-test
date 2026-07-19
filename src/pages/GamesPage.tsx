@@ -7,11 +7,12 @@ import type { Game } from "../types/game";
 import type { Category } from "../types/category";
 
 import { Header } from "../components/Header";
-import "./Gamespage.css";
 import { PlayerProfile } from "../components/PlayerProfile";
 import { LogoutButton } from "../components/LogoutButton";
-
-
+import { CategoryList } from "../components/CategoryList";
+import "./Gamespage.css";
+import { SearchBar } from "../components/SearchBar";
+import { GamesList } from "../components/GameList";
 
 export function GamesPage({} ) {
   const navigate = useNavigate();
@@ -89,94 +90,23 @@ export function GamesPage({} ) {
             <LogoutButton />
           </div>
 
-          <div className="search-area">
-            <label className="sr-only" htmlFor="game-search">
-              Search games
-            </label>
-
-            <div className="ui fluid icon input game-search">
-              <input
-                id="game-search"
-                type="search"
-                placeholder="Search Game"
-                value={searchTerm}
-                onChange={(event) => setSearchTerm(event.target.value)}
-              />
-
-              <i className="search icon" aria-hidden="true" />
-            </div>
-          </div>
+          <SearchBar
+            value={searchTerm}
+            onChange={setSearchTerm}
+          />
         </header>
 
         <div className="games-layout">
-          <section className="games-section">
-            <h2 className="section-heading">Games</h2>
+          <GamesList
+            games={filteredGames}
+            onPlay={handlePlay}
+          />
 
-            <div className="section-divider" />
-
-            {filteredGames.length > 0 ? (
-              <div className="games-list">
-                {filteredGames.map((game) => (
-                  <article className="game-card" key={game.code}>
-                    <div className="game-image-wrapper">
-                      <img
-                        className="game-image"
-                        src={game.icon}
-                        alt={`${game.name} game`}
-                      />
-                    </div>
-
-                    <div className="game-content">
-                      <h3>{game.name}</h3>
-
-                      <p>{game.description}</p>
-
-                      <button
-                        className="ui black button play-button"
-                        type="button"
-                        onClick={() => handlePlay(game.code)}
-                      >
-                        Play
-                        <i
-                          className="right chevron icon"
-                          aria-hidden="true"
-                        />
-                      </button>
-                    </div>
-                  </article>
-                ))}
-              </div>
-            ) : (
-              <div className="ui message empty-games-message">
-                <div className="header">No games found</div>
-                <p>Try another search term or choose a different category.</p>
-              </div>
-            )}
-          </section>
-
-          <aside className="categories-section">
-            <h2 className="section-heading">Categories</h2>
-
-            <div className="section-divider" />
-
-            <nav
-              className="category-navigation"
-              aria-label="Game categories"
-            >
-              {categories.map((category) => (
-                <button
-                  className={`category-button ${
-                    selectedCategoryId === category.id ? "active" : ""
-                  }`}
-                  type="button"
-                  key={category.id}
-                  onClick={() => setSelectedCategoryId(category.id)}
-                >
-                  {category.name}
-                </button>
-              ))}
-            </nav>
-          </aside>
+            <CategoryList
+              categories={categories}
+              selectedCategoryId={selectedCategoryId}
+              onSelectCategory={setSelectedCategoryId}
+            />
         </div>
       </section>
     </main>

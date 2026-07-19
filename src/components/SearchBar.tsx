@@ -1,0 +1,27 @@
+type SearchBarProps = {
+  value: string;
+  onChange: (value: string) => void;
+};
+
+export function SearchBar({
+  value,
+  onChange,
+}: SearchBarProps) {
+  return (
+    <div className="search-area">
+      <label className="sr-only" htmlFor="game-search">
+        Search games
+      </label>
+      <div className="ui fluid icon input">
+        <input
+          type="search"
+          placeholder="Search Game"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+        />
+
+        <i className="search icon" />
+      </div>
+    </div>
+  );
+}
