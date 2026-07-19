@@ -5,6 +5,11 @@ import {
 } from "react";
 
 import { loginRequest } from "../api/casinoApi/authApi";
+import {
+  getStoredPlayer,
+  removeStoredPlayer,
+  savePlayer,
+} from "./AuthStorage";
 import type {
   LoginCredentials,
   Player,
@@ -27,19 +32,24 @@ type AuthProviderProps = {
 export function AuthProvider({
   children,
 }: AuthProviderProps) {
-  const [player, setPlayer] = useState<Player | null>(null);
+  const [player, setPlayer] = useState<Player | null>(() =>
+    getStoredPlayer(),
+  );
+
 
   const login = async (
     credentials: LoginCredentials,
   ): Promise<void> => {
     const result = await loginRequest(credentials);
     const player = result.player;
+    savePlayer(player);
     setPlayer(player);
   };
 
-  const logout = () => {
+  function logout() {
+    removeStoredPlayer();
     setPlayer(null);
-  };
+  }
 
   return (
     <AuthContext.Provider
