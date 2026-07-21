@@ -1,4 +1,5 @@
 export function LoadingState() {
+  return (
   <section
     className="games-feedback"
     role="status"
@@ -8,5 +9,5 @@ export function LoadingState() {
     <div className="ui active centered inline text loader">
       Loading games
     </div>
-  </section>
+  </section>);
 }
