@@ -13,6 +13,10 @@ export  function GamePage() {
     if (!gameCode) return;
 
     comeon.game.launch(gameCode);
+    return () => {
+    // Clean up the game container to prevent the previous game from remaining mounted.
+    document.getElementById("game-launch")?.replaceChildren();
+  };
     
   }, [gameCode]);
 
