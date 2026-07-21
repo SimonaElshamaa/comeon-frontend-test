@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Header } from "../components/Header";
 import { LogoutButton } from "../components/LogoutButton";
 import { PlayerProfile } from "../components/PlayerProfile";
-
+import "./GamePage.css";
 export  function GamePage() {
   const { gameCode } = useParams();
   const navigate = useNavigate();
@@ -21,20 +21,33 @@ export  function GamePage() {
   }, [gameCode]);
 
   return (
-    <main className="games-page">
+     <main className="game-page">
       <Header />
 
-      <section className="games-shell">
+      <section className="game-shell">
+        <div className="game-toolbar">
           <PlayerProfile />
-          <LogoutButton />
-          <button
-          type="button"
-          className="ui black button logout-button"
-          onClick={() => navigate("/games")}
-        >
-          Back to games
-        </button>
-        <div id="game-launch" />
+          <div className="game-actions">
+            <LogoutButton />            
+            <button
+              type="button"
+              className="ui black button game-back-button"
+              onClick={() => navigate("/games")}
+            >
+              <i
+                className="left chevron icon"
+                aria-hidden="true"
+              />
+              Back to games
+            </button>
+          </div>
+         
+        </div>
+
+        <div
+          id="game-launch"
+          className="game-launch"
+        />
       </section>
     </main>
   );

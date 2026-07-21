@@ -76,7 +76,12 @@ input {
   line-height: 1.35;
   color: #333;
 }
-
+.games-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
 .logout-button {
   margin-top: 24px !important;
   min-width: 174px;

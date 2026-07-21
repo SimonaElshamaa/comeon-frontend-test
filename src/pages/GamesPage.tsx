@@ -1,5 +1,8 @@
 import { useNavigate } from "react-router-dom";
 
+import { getGames } from "../api/casinoApi/gamesApi";
+import { getCategories } from "../api/casinoApi/categoriesApi";
+
 import { useGamesData } from "../hooks/useGamesData";
 import { useGameFilters } from "../hooks/useGameFilters"; 
 
@@ -25,7 +28,9 @@ export function GamesPage() {
     categories,
     isLoading,
     error,
-  } = useGamesData();
+  } = useGamesData({
+    fetchGames: getGames,
+    fetchCategories: getCategories});
 
   // Second hook: filters the games returned by the first hook.
   const {
@@ -47,7 +52,9 @@ export function GamesPage() {
         <header className="games-header">
           <div className="player-area">
             <PlayerProfile />
-            <LogoutButton />
+            <div className="games-actions">
+              <LogoutButton />
+            </div>
           </div>
 
           <SearchBar

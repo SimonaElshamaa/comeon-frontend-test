@@ -1,30 +1,136 @@
-.games-shell {
-  width: calc(100% - 140px);
-  max-width: 1500px;
-  min-height: calc(100vh - 20px);
-  margin: 0 auto;
-  padding: 42px 42px 60px;
-  background: #fff;
+.game-page,
+.game-page *,
+.game-page *::before,
+.game-page *::after {
+  box-sizing: border-box;
 }
 
-.games-page {
-  min-height: 100vh;
+.game-page {
   width: 100%;
+  max-width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
   padding: 20px 5px 0;
+  overflow-x: clip;
   background: #444;
 }
 
-.player-area {
+.game-shell {
+  width: min(90%, 1500px);
+  max-width: 100%;
+  min-width: 0;
+  min-height: calc(100vh - 20px);
+  min-height: calc(100dvh - 20px);
+  margin-inline: auto;
+  padding: clamp(24px, 3vw, 42px);
+  background: #fff;
+}
+
+.game-toolbar {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  color: blue;
 }
 
-.logout-button {
-  margin-top: 24px !important;
+.game-player-area {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+}
+.game-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.game-back-button {
+   margin-top: 24px !important;
   min-width: 174px;
   min-height: 52px;
   font-size: 19px !important;
   font-weight: 700 !important;
+  
+}
+
+/* Container used by the external game launcher. */
+.game-launch {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  min-height: 320px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-inline: contain;
+}
+
+/* Keep content inserted by comeon.game inside the container. */
+.game-launch > * {
+  max-width: 100% !important;
+}
+
+.game-launch iframe {
+  display: block;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-height: 500px;
+  border: 0;
+}
+
+.game-launch canvas,
+.game-launch img,
+.game-launch video {
+  display: block;
+  max-width: 100% !important;
+  height: auto;
+}
+
+@media (max-width: 800px) {
+  .game-page {
+    padding: 0;
+  }
+
+  .game-shell {
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: 24px 20px 40px;
+  }
+
+  .game-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1.5rem;
+  }
+
+  .game-back-button {
+    width: 100%;
+  }
+
+  .game-launch iframe {
+    min-height: 420px;
+  }
+}
+
+@media (max-width: 560px) {
+  .game-shell {
+    padding: 20px 16px 32px;
+  }
+
+  .game-player-area {
+    width: 100%;
+  }
+
+  .game-player-area .logout-button {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .game-launch {
+    min-height: 280px;
+  }
+
+  .game-launch iframe {
+    min-height: 360px;
+  }
 }
