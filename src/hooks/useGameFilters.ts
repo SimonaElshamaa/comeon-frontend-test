@@ -52,20 +52,67 @@ export function useGameFilters(games: Game[]): UseGameFiltersResult {
   }
 
   const filteredGames = useMemo(() => {
-    const normalizedSearch = searchTerm.trim().toLowerCase();
+  const query = searchTerm.trim().toLowerCase();
 
-    return games.filter((game) => {
-      const matchesSearch =
-        normalizedSearch.length === 0 ||
-        game.name.toLowerCase().includes(normalizedSearch) ||
-        game.description.toLowerCase().includes(normalizedSearch);
+  // Apply the selected category first.
+  const gamesInSelectedCategory =
+    selectedCategoryId === null
+      ? games
+      : games.filter((game) =>
+          game.categoryIds.includes(selectedCategoryId),
+        );
 
-      const matchesCategory =
-        selectedCategoryId === null ||
-        game.categoryIds.includes(selectedCategoryId);
+  // Preserve the original order when there is no search.
+  if (!query) {
+    return gamesInSelectedCategory;
+    }
 
-      return matchesSearch && matchesCategory;
-    });
+    return gamesInSelectedCategory
+      .map((game, originalIndex) => {
+        const normalizedName = game.name.toLowerCase();
+        const normalizedDescription =
+          game.description.toLowerCase();
+
+        let score: number | null = null;
+
+        if (normalizedName === query) {
+          // Highest relevance: exact game name.
+          score = 0;
+        } else if (normalizedName.startsWith(query)) {
+          // Second: game name starts with the query.
+          score = 1;
+        } else if (normalizedName.includes(query)) {
+          // Third: game name contains the query.
+          score = 2;
+        } else if (
+          normalizedDescription.includes(query)
+        ) {
+          // Lowest relevance: description contains the query.
+          score = 3;
+        }
+
+        return {
+          game,
+          score,
+          originalIndex,
+        };
+      })
+      .filter(
+        (
+          result,
+        ): result is {
+          game: Game;
+          score: number;
+          originalIndex: number;
+        } => result.score !== null,
+      )
+      .sort(
+        (firstResult, secondResult) =>
+          firstResult.score - secondResult.score ||
+          firstResult.originalIndex -
+            secondResult.originalIndex,
+      )
+      .map(({ game }) => game);
   }, [games, searchTerm, selectedCategoryId]);
 
   return {
