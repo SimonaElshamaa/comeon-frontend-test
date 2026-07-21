@@ -22,6 +22,7 @@ export function GamesList({
                 <GameCard
                     game={game}
                     onPlay={onPlay}
+                    key={game.code}
                 />
             ))}
             </div>

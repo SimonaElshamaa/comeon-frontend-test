@@ -10,7 +10,7 @@ export function GameCard({
   onPlay,
 }: GameCardProps) {
   return (
-    <article className="game-card" key={game.code}>
+    <article className="game-card">
         <div className="game-image-wrapper">
             <img
             className="game-image"

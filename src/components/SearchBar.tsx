@@ -14,6 +14,7 @@ export function SearchBar({
       </label>
       <div className="ui fluid icon input">
         <input
+          id="game-search"
           type="search"
           placeholder="Search Game"
           value={value}
