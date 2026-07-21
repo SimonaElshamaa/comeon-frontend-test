@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { getGames } from "../api/casinoApi/gamesApi";
-import { getCategories } from "../api/casinoApi/categoriesApi";
-
 import type { Game } from "../types/game";
 import type { Category } from "../types/category";
+
+type UseGamesDataDependencies = {
+  fetchGames: () => Promise<Game[]>;
+  fetchCategories: () => Promise<Category[]>;
+};
 
 type UseGamesDataResult = {
   games: Game[];
@@ -14,7 +16,10 @@ type UseGamesDataResult = {
   reload: () => Promise<void>;
 };
 
-export function useGamesData(): UseGamesDataResult {
+export function useGamesData({
+  fetchGames,
+  fetchCategories,
+}: UseGamesDataDependencies): UseGamesDataResult {
   const [games, setGames] = useState<Game[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -26,8 +31,8 @@ export function useGamesData(): UseGamesDataResult {
       setError(null);
 
       const [gamesData, categoriesData] = await Promise.all([
-        getGames(),
-        getCategories(),
+        fetchGames(),
+        fetchCategories(),
       ]);
 
       setGames(gamesData);
