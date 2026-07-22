@@ -1,29 +1,22 @@
 import {
-  createContext,
   useState,
   type ReactNode,
 } from "react";
 
-import { loginRequest } from "../api/casinoApi/authApi";
+import { loginRequest, logoutRequest } from "../api/casinoApi/authApi";
 import {
   getStoredPlayer,
   removeStoredPlayer,
   savePlayer,
 } from "./AuthStorage";
+import { AuthContext } from "./AuthContextDefinition";
+
 import type {
   LoginCredentials,
   Player,
 } from "../types/auth";
 
-type AuthContextValue = {
-  player: Player | null;
-  isAuthenticated: boolean;
-  login: (credentials: LoginCredentials) => Promise<void>;
-  logout: () => void;
-};
 
-export const AuthContext =
-  createContext<AuthContextValue | undefined>(undefined);
 
 type AuthProviderProps = {
   children: ReactNode;
@@ -46,9 +39,11 @@ export function AuthProvider({
     setPlayer(player);
   };
 
-  function logout() {
+  const logout = async (player: Player) => {
+    await logoutRequest(player.name);
     removeStoredPlayer();
     setPlayer(null);
+    
   }
 
   return (
