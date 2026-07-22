@@ -3,10 +3,14 @@ export type LoginCredentials = {
   password: string;
 };
 
-export type Player = {
+export type PlayerResponse = {
   name: string;
   avatar: string;
   event: string;
+};
+
+export type Player = PlayerResponse & {
+  username: string;
 };
 
 export interface LoginResponse {
