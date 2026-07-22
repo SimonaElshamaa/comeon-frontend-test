@@ -4,15 +4,18 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/useAuth";
 
 export function LogoutButton() {
-  const { logout } = useAuth();
+  const { logout,player } = useAuth();
   const navigate = useNavigate();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
 async function handleLogout() {
+    if (!player) {
+      return;
+    }
     try {
         setIsLoggingOut(true);
 
-        await logout?.();
+        await logout(player);
 
         navigate("/login", {
         replace: true,

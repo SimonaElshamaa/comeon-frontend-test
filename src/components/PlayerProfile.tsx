@@ -4,6 +4,10 @@ export function PlayerProfile() {
 const { player } = useAuth();
 
 
+if (!player) {
+    return null;
+}
+
 return(
     <div className="player-profile">
         <img

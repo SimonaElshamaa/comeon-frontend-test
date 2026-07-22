@@ -31,13 +31,13 @@ export async function loginRequest(
   return (await response.json()) as LoginResponse;
 }
 
-export function logout(username: string) {
+export function logoutRequest(name: string) {
   return request<{ status: string }>("/logout", {
     method: "POST",
     headers: {
       'Accept': 'application/json',
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ username }),
+    body: JSON.stringify({ name }),
   });
 }
