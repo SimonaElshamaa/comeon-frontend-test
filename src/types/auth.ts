@@ -5,8 +5,8 @@ export type LoginCredentials = {
 
 export type Player = {
   name: string;
-  avatar?: string;
-  event?: string;
+  avatar: string;
+  event: string;
 };
 
 export interface LoginResponse {
