@@ -28,6 +28,8 @@ export function useGamesData({
     let isCancelled = false;
 
     async function loadGamesData() {
+      setIsLoading(true);
+      setError(null);
       try {
         const [gamesData, categoriesData] =
           await Promise.all([
