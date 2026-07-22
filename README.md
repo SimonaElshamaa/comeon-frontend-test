@@ -100,7 +100,6 @@ VITE_API_BASE_URL=http://localhost:3001
 ```bash
 npm run dev
 npm run api
-npm run build
 npm run lint
 npm run test
 npm run test:run
