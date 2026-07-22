@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import type { Game } from "../types/game";
 import type { Category } from "../types/category";
@@ -13,7 +13,6 @@ type UseGamesDataResult = {
   categories: Category[];
   isLoading: boolean;
   error: string | null;
-  reload: () => Promise<void>;
 };
 
 export function useGamesData({
@@ -25,38 +24,52 @@ export function useGamesData({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const reload = useCallback(async () => {
-    try {
-      setIsLoading(true);
-      setError(null);
+   useEffect(() => {
+    let isCancelled = false;
 
-      const [gamesData, categoriesData] = await Promise.all([
-        fetchGames(),
-        fetchCategories(),
-      ]);
+    async function loadGamesData() {
+      try {
+        const [gamesData, categoriesData] =
+          await Promise.all([
+            fetchGames(),
+            fetchCategories(),
+          ]);
 
-      setGames(gamesData);
-      setCategories(categoriesData);
-    } catch (error) {
-      setError(
-        error instanceof Error
-          ? error.message
-          : "We could not load the games.",
-      );
-    } finally {
-      setIsLoading(false);
+        if (isCancelled) {
+          return;
+        }
+
+        setGames(gamesData);
+        setCategories(categoriesData);
+      } catch (error) {
+        if (isCancelled) {
+          return;
+        }
+
+        setError(
+          error instanceof Error
+            ? error.message
+            : "We could not load the games.",
+        );
+      } finally {
+        if (!isCancelled) {
+          setIsLoading(false);
+        }
+      }
     }
-  }, []);
 
-  useEffect(() => {
-    void reload();
-  }, [reload]);
+    void loadGamesData();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [fetchGames, fetchCategories]);
+
 
   return {
     games,
     categories,
     isLoading,
     error,
-    reload,
   };
 }
