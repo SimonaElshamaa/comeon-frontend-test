@@ -34,17 +34,26 @@ export function AuthProvider({
     credentials: LoginCredentials,
   ): Promise<void> => {
     const result = await loginRequest(credentials);
-    const player = result.player;
-    savePlayer(player);
-    setPlayer(player);
+    const authenticatedPlayer: Player = {
+      ...result.player,
+      username: credentials.username.trim(),
+    };
+     savePlayer(authenticatedPlayer);
+    setPlayer(authenticatedPlayer);
   };
 
-  const logout = async (player: Player) => {
-    await logoutRequest(player.name);
-    removeStoredPlayer();
-    setPlayer(null);
-    
-  }
+  const logout = async (
+  playerToLogout: Player,
+  ): Promise<void> => {
+    try {
+      await logoutRequest(
+        playerToLogout.username,
+      );
+    } finally {
+      removeStoredPlayer();
+      setPlayer(null);
+    }
+  };
 
   return (
     <AuthContext.Provider
