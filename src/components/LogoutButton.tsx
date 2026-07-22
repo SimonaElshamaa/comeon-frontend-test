@@ -27,6 +27,7 @@ async function handleLogout() {
 
   return (
     <button
+       aria-label="Log out"
         className={`ui black button logout-button ${
         isLoggingOut ? "loading disabled" : ""
         }`}

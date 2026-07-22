@@ -13,6 +13,7 @@ export function CategoryItem({
 }: CategoryItemProps) {
   return (
     <button
+        aria-label={`Select ${category.name}`}
         className={`category-button ${
         selectedCategoryId === category.id ? "active" : ""
         }`}

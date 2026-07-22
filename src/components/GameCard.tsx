@@ -28,6 +28,7 @@ export function GameCard({
             <p>{game.description}</p>
 
             <button
+            aria-label={`Play ${game.name}`}
             className="ui black button play-button"
             type="button"
             onClick={() => onPlay(game.code)}

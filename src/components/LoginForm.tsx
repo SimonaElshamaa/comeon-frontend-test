@@ -73,6 +73,7 @@ export function LoginForm({
       </div>
 
       <button
+        aria-label="Login"
         type="submit"
         className={`ui basic button login-button ${
           isLoading ? "loading disabled" : ""

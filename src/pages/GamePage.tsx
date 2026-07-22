@@ -30,6 +30,7 @@ export  function GamePage() {
           <div className="game-actions">
             <LogoutButton />            
             <button
+            aria-label="Back to games"
               type="button"
               className="ui black button game-back-button"
               onClick={() => navigate("/games")}
