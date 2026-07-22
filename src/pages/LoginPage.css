@@ -1,56 +1,75 @@
 .login-page {
-  min-height: 100vh;
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
   padding: 36px 16px;
+  overflow-x: hidden;
   background: #444;
 }
 
 .login-header {
   display: flex;
+  width: 100%;
+  max-width: 100%;
   justify-content: center;
   margin-bottom: 32px;
 }
 
 .login-logo {
   width: min(320px, 70vw);
+  max-width: 100%;
   height: auto;
 }
 
 .login-panel {
+  display: flex;
   width: min(1190px, 100%);
+  max-width: 100%;
+  min-width: 0;
   min-height: 305px;
   margin: 0 auto;
   padding: 30px 20px;
-  background: #fff;
-  display: flex;
-  justify-content: center;
   align-items: flex-start;
+  justify-content: center;
+  background: #fff;
 }
 
 .login-form {
-  width: 250px;
+  width: min(250px, 100%);
+  min-width: 0;
 }
 
 .ui.form.login-form .field {
-  margin-bottom: 12px;
+  width: 100%;
+  margin: 0 0 12px;
 }
 
 .ui.form.login-form .input {
   width: 100%;
+  min-width: 0;
 }
 
 .ui.form.login-form input {
+  width: 100%;
+  min-width: 0;
   height: 46px;
 }
 
 .login-button {
   display: block !important;
+  max-width: 100%;
   margin: 12px auto 0 !important;
 }
 
 @media (max-width: 600px) {
   .login-page {
     padding: 24px 12px;
+  }
+
+  .login-header {
+    margin-bottom: 24px;
   }
 
   .login-panel {

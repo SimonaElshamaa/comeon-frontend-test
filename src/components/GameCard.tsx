@@ -16,11 +16,14 @@ export function GameCard({
             className="game-image"
             src={game.icon}
             alt={`${game.name} game`}
+            onClick={() => onPlay(game.code)}
             />
         </div>
 
         <div className="game-content">
-            <h3>{game.name}</h3>
+            <h3 onClick={() => onPlay(game.code)}>
+              {game.name}
+            </h3>
 
             <p>{game.description}</p>
 
