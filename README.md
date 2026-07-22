@@ -1,167 +1,196 @@
-![comeon-javascript-test-site](example.png)
-# comeon-frontend-test
+# ComeOn Frontend Assignment
 
-Applicant's test for Frontend developers.
+A responsive casino frontend built with React and TypeScript for the ComeOn Group frontend assignment.
 
-## Assignment Overview
+The application supports authentication, protected routes, game browsing, URL-based search and category filtering, and game launching through the provided ComeOn API.
 
-The assignment is to use develop the frontend and tie together existing data to create a minimal, working casino website.
+## Features
 
-Basic HTML, CSS, images and JSON data is provided, however, feel free to impress by changing and enhancing any of these parts for an even better experience!
+- Login using the provided mock API
+- Friendly feedback for invalid credentials
+- Persistent authentication using local storage
+- Protected games and game routes
+- Logout through the `/logout` endpoint
+- Games and categories loaded from the mock API
+- Search by game name or description
+- Relevance-based search result ordering
+- Category filtering
+- Search and category state stored in URL parameters
+- Loading and error 
+- Responsive desktop, tablet and mobile layouts
+-   tests
 
-Your mission is to provide the frontend code that makes the parts work as described, below.
-**Feel free to use any other openly available library for validation, templating, dependency injection, etc.**
+## Technology
 
-## Assignment Criteria
+- React
+- TypeScript
+- Vite
+- React Router
+- Semantic UI CSS
+- Vitest
+- React Testing Library
+- json-server
 
-We want to see how you approach and solve a problem, as well as look at code style and quality.
-Do take your time to do it right, rather than fast.
-Extra effort to improve on the "website" will be noted. :)
+## Requirements
 
-While the test is primarily focused on TS (or JS), by all means use or change the HTML or CSS when that makes sense. We expect the app to be functional across various devices a.k.a responsive.
+- Node.js `20.19+` or `22.12+`
+- npm
 
-Be prepared to discuss your choices and code when delivered. We would also expect you to answer on how to extend the application to include more features and functionality.
+## Installation
 
-These parts needs all to be completed for the assignment to be complete:
+Clone the repository:
 
-### Login functionality
-
-* Connect the login form to the /login ajax call.
-* On valid username/password, transition to the games list screen.
-* On invalid username/password, provide feedback and allow to try again.
-
-### Log out functionality
-
-* Connect the log out button to the /logout ajax call.
-* On valid log out, transition to login screen with empty input fields.
-
-### Games list screen
-
-* Requires user to be logged in
-* List all games from the /games ajax call.
-* List categories from /categories ajax call.
-* Provide functionality for filtering by typing.
-* Provide functionality to filter by category.
-* Make it possible to start a game by clicking on the play icon.
-
-### Game play screen
-
-* Requires user to be logged in
-* Load the selected game via the provided API
-* Provide a way to go back to the Games list screen
-
-### Setup mock api
-```javascript
-npm install -g json-server
+```bash
+git clone https://github.com/SimonaElshamaa/comeon-frontend-test.git
+cd comeon-frontend-test
 ```
 
-```javascript
-json-server --watch mock/mock-data.json --port 3001 --middlewares mock/mock-api.js
+Install dependencies:
+
+```bash
+npm ci
 ```
 
-Update: Use json-server version other than latest or alpha for example 0.17.3 or lower.
+## Running the application
 
-## API
-There are four methods on the API: login, logout, games, and categories.
+Start the mock API in one terminal:
 
-### Login
-Path: /login
-
-Will give you player information.
-It is possible to login with three accounts:
-
-```
-username: rebecka
-password: secret
-
-username: eric
-password: dad
-
-username: stoffe
-password: rock
+```bash
+npm run api
 ```
 
-##### Request
-```javascript
-fetch('http://localhost:3001/login', {
-            method: 'post',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                username: 'rebecka',
-                password: 'secret'
-            })
-        }
-);
+The API will run at:
+
+```text
+http://localhost:3001
 ```
 
-##### Response
-```javascript
-{
-	status: 'success',
-	player: {
-            name: 'Rebecka Awesome',
-            avatar: 'images/avatar/rebecka.jpg',
-            event: 'Last seen gambling on Starburst.'            
-    }
-}
+Start the frontend in another terminal:
+
+```bash
+npm run dev
 ```
 
-### Log out
-Path: /logout
+Open the URL displayed by Vite, normally:
 
-Use the current player's username.
-
-##### Request
-```javascript
-fetch('http://localhost:3001/logout', {
-            method: 'post',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                username: 'rebecka'
-            })
-        }
-);
+```text
+http://localhost:5173
 ```
 
-### Games and Categories
-These methods are located on paths /games and /categories.
+## Test accounts
 
-Please explore the response of these methods.
-```javascript
-fetch('http://localhost:3001/games', { method: 'get' });
+| Username | Password |
+|---|---|
+| `rebecka` | `secret` |
+| `eric` | `dad` |
+| `stoffe` | `rock` |
+
+## Environment configuration
+
+The application uses `http://localhost:3001` as the default API URL.
+
+It can be changed by creating a `.env.local` file:
+
+```env
+VITE_API_BASE_URL=http://localhost:3001
 ```
 
+## Available scripts
 
-## Loading a game
-
-We have written an API for loading the games. Here's a simple example of how to load a game through our API:
-
-```javascript
-comeon.game.launch('feastingfox');
+```bash
+npm run dev
+npm run api
+npm run build
+npm run lint
+npm run test
+npm run test:run
 ```
 
-It basically takes a game code as an in parameter.
-The div with id game-launch will be replaced with an object tag that loads the game.
+- `dev` – starts the Vite development server
+- `api` – starts the mock API
+- `build` – type-checks and creates a production build
+- `lint` – runs ESLint
+- `test` – runs Vitest in watch mode
+- `test:run` – runs all tests once
 
-## More info
+## Architecture
 
-- Use of React and TS is encouraged.
-- Use of JS and [jQuery](https://jquery.com/) is discouraged. 
-- External libraries used in this test: [Semantic UI](http://semantic-ui.com/), [json-server](https://github.com/typicode/json-server)
+The project uses a small layered React architecture:
 
-## Found a bug?
+```text
+src/
+├── api/          API client and endpoint functions
+├── auth/         Authentication context, storage and route protection
+├── components/   Reusable UI components
+├── hooks/        Data-loading and filtering logic
+├── pages/        Route-level components
+├── router/       Application routes
+├── test/         Automated tests
+└── types/        Shared TypeScript types
+```
 
-Pull requests welcome, and maybe [we have a job for you](http://jobs.comeon.com/)? :)
+Responsibilities are separated between pages, reusable presentation components, custom hooks, authentication state and API communication.
 
-## How to Submit the Home Assignment
-We would prefer that you push the code to a git repo and send us the link, but you could also send us your code in a compressed file in an email.
+API functions and UI behavior are injected through function parameters and props. This keeps components less coupled and easier to test.
 
-## QuickSpin Games
+## Design decisions
 
-All of the linked games and their media files and descriptions are properties of QuickSpin AB and can be found publicly on their web site at https://quickspin.com/
+### URL-based filtering
+
+Search and category values are stored in URL parameters:
+
+```text
+/games?search=fox&category=1
+```
+
+This preserves filters across refreshes and supports browser Back and Forward navigation.
+
+### Search relevance
+
+Matching games are ordered by relevance:
+
+1. Exact name match
+2. Name starts with the query
+3. Name contains the query
+4. Description contains the query
+
+Games with the same score keep their original API order.
+
+### Authentication persistence
+
+The authenticated player is stored locally so protected routes continue to work after refreshing the browser. Logout removes the stored player.
+
+## Testing
+
+Tests are written with Vitest and React Testing Library and focus on user-visible behavior, including:
+
+- Successful login
+- Failed login feedback
+- Game navigation through the Play button
+- Combined search and category filtering
+- API failure
+- Logout behavior
+
+Run all tests once with:
+
+```bash
+npm run test:run
+```
+
+## Known limitation
+
+The provided external game launcher can return a `403` response in the test environment. The application still performs the required journey and calls:
+
+```ts
+comeon.game.launch(gameCode);
+```
+
+The game container is cleaned up when leaving the game page.
+
+## Possible future improvements
+
+- Server-backed session validation
+- Debounced search for larger datasets
+- Pagination or virtualized game lists
+- More extensive accessibility testing
+- End-to-end tests with Playwright
