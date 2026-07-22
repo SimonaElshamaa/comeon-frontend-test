@@ -14,9 +14,9 @@ export function ErrorMessage({
       />
 
       <div className="content">
-        <div className="header">
+        <header>
           We couldn&apos;t load the games
-        </div>
+        </header>
 
         <p>{message}</p>
       </div>

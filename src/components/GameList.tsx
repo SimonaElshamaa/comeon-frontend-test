@@ -12,7 +12,7 @@ export function GamesList({
 }: GamesListProps) {
   return (
     <section className="games-section">
-        <h2 className="section-heading">Games</h2>
+        <h2 className="section-heading" id="games-heading">Games</h2>
 
         <div className="section-divider" />
 
@@ -28,7 +28,7 @@ export function GamesList({
             </div>
         ) : (
             <div className="ui message empty-games-message">
-            <div className="header">No games found</div>
+            <header>No games found</header>
             <p>Try another search term or choose a different category.</p>
             </div>
         )}
