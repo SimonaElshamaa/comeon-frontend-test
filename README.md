@@ -3,6 +3,19 @@
 A responsive casino frontend built with React and TypeScript for the ComeOn Group frontend assignment.
 
 The application supports authentication, protected routes, game browsing, URL-based search and category filtering, and game launching through the provided ComeOn API.
+## Preview
+
+### Login
+
+![Login page](public/images/LoginPageImage.png)
+
+### Games
+
+![Games page](public/images/GamesPageImage.png)
+
+### Games
+
+![Games page](public/images/GamePageImage.png)
 
 ## Features
 
@@ -16,9 +29,10 @@ The application supports authentication, protected routes, game browsing, URL-ba
 - Relevance-based search result ordering
 - Category filtering
 - Search and category state stored in URL parameters
-- Loading and error 
+- Loading and error states with retry
 - Responsive desktop, tablet and mobile layouts
--   tests
+- Accessible UI with semantic HTML and ARIA attributes
+- Unit and integration tests with Vitest and React Testing Library
 
 ## Technology
 
@@ -121,18 +135,54 @@ src/
 ├── api/          API client and endpoint functions
 ├── auth/         Authentication context, storage and route protection
 ├── components/   Reusable UI components
-├── hooks/        Data-loading and filtering logic
+├── hooks/        Data loading, filtering and reusable business logic
 ├── pages/        Route-level components
 ├── router/       Application routes
 ├── test/         Automated tests
 └── types/        Shared TypeScript types
 ```
 
-Responsibilities are separated between pages, reusable presentation components, custom hooks, authentication state and API communication.
+Responsibilities are separated between pages, reusable UI components, custom hooks, authentication, and API communication. This keeps components focused on rendering while custom hooks manage reusable business logic.
 
 API functions and UI behavior are injected through function parameters and props. This keeps components less coupled and easier to test.
 
+## API layer
+All HTTP requests are centralized through a reusable API client.
+
+The client:
+
+- Handles network failures
+- Maps HTTP errors to user-friendly messages
+- Parses JSON responses
+- Throws a consistent `ApiError` type
+
+This keeps API concerns separate from UI components.
+
+
 ## Design decisions
+### State management
+
+The application uses React Context for authentication instead of Redux.
+
+The project has a relatively small global state, limited to the authenticated player. React Context keeps the solution simple while avoiding the additional complexity and boilerplate of Redux.
+
+Authentication state is persisted in local storage, allowing protected routes to remain accessible after a browser refresh until the user logs out.
+
+### Separation of concerns
+
+The application separates responsibilities across pages, reusable UI components, custom hooks, authentication, and the API layer.
+
+- Pages compose features and handle routing.
+- Custom hooks encapsulate reusable business logic such as data loading and filtering.
+- Components focus on rendering the UI.
+- API communication is centralized in a reusable client.
+- Authentication is managed independently through React Context.
+
+### Dependency injection
+
+Custom hooks receive API functions through parameters instead of importing them directly.
+
+This keeps the hooks loosely coupled to the API implementation and makes them easier to test by allowing mock functions to be injected during unit tests.
 
 ### URL-based filtering
 
@@ -175,6 +225,20 @@ Run all tests once with:
 ```bash
 npm run test:run
 ```
+## Accessibility
+
+The application includes several accessibility improvements:
+
+- Semantic HTML elements
+- Accessible form labels
+- Keyboard-accessible controls
+- ARIA labels where appropriate
+- Error messages announced using `role="alert"`
+- Loading state announced using `role="status"`
+
+## Responsive design
+
+The interface adapts to desktop, tablet, and mobile screen sizes using responsive layouts and media queries.
 
 ## Known limitation
 
