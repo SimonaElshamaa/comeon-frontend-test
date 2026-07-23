@@ -1,21 +1,44 @@
-import { API_ERRORS } from "./errors";
-
+import {
+  API_ERRORS,
+  getApiErrorMessage,
+} from "./errors";
 
 const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL ?? "http://localhost:3001";
-  
+  import.meta.env.VITE_API_BASE_URL ??
+  "http://localhost:3001";
+
+type ApiErrorResponse = {
+  error?: string;
+  message?: string;
+};
 
 export class ApiError extends Error {
   readonly status?: number;
-  constructor(
-    message: string, status?: number) {
-    super(message);
-    this.name = "ApiError";
 
+  constructor(message: string, status?: number) {
+    super(message);
+
+    this.name = "ApiError";
     this.status = status;
   }
 }
 
+async function readErrorMessage(
+  response: Response,
+): Promise<string> {
+  try {
+    const data =
+      (await response.json()) as ApiErrorResponse;
+
+    return (
+      data.message ??
+      data.error ??
+      getApiErrorMessage(response.status)
+    );
+  } catch {
+    return getApiErrorMessage(response.status);
+  }
+}
 
 export async function request<T>(
   path: string,
@@ -23,22 +46,24 @@ export async function request<T>(
 ): Promise<T> {
   let response: Response;
 
-  // Network errors
   try {
-    response = await fetch(`${API_BASE_URL}${path}`, options);
+    response = await fetch(
+      `${API_BASE_URL}${path}`,
+      options,
+    );
   } catch {
-    throw new ApiError(API_ERRORS.NETWORK_ERROR);
+    throw new ApiError(API_ERRORS.NETWORK);
   }
 
-  // HTTP errors (401, 404, 500...)
   if (!response.ok) {
+    const message = await readErrorMessage(response);
+
     throw new ApiError(
-      API_ERRORS.REQUEST_FAILED,
+      message,
       response.status,
     );
   }
 
-  // Invalid JSON
   try {
     return (await response.json()) as T;
   } catch {

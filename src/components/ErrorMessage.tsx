@@ -1,26 +1,29 @@
 type ErrorMessageProps = {
   message: string;
+  onRetry?: () => void;
 };
 
 export function ErrorMessage({
-  message
+  message,
+  onRetry
 }: ErrorMessageProps) {
   return (
-    <section className="games-feedback">
-    <div className="ui negative icon message" role="alert">
-      <i
-        className="warning sign icon"
-        aria-hidden="true"
-      />
+      <div className="ui negative icon message" role="alert">
 
-      <div className="content">
-        <header>
-          We couldn&apos;t load the games
-        </header>
+        <div className="content">
 
-        <p>{message}</p>
+          <p>{message}</p>
+
+          {onRetry && (
+          <button
+            type="button"
+            className="ui black button"
+            onClick={onRetry}
+          >
+            Try again
+          </button>
+              )}
+        </div>
       </div>
-    </div>
-  </section>
   );
 }
