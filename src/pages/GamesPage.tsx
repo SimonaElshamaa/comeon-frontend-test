@@ -28,6 +28,7 @@ export function GamesPage() {
     categories,
     isLoading,
     error,
+    reload,
   } = useGamesData({
     fetchGames: getGames,
     fetchCategories: getCategories});
@@ -65,7 +66,10 @@ export function GamesPage() {
         {isLoading ? (
         <LoadingState/>
       ) : error ? (
-          <ErrorMessage message={error} />
+          <ErrorMessage 
+          message={error} 
+          onRetry={reload}
+          />
       ) : (
         <div className="games-layout">
           <GamesList

@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+
+import { getErrorMessage } from "../api/getErrorMessage";
 
 import type { Game } from "../types/game";
 import type { Category } from "../types/category";
@@ -13,6 +15,7 @@ type UseGamesDataResult = {
   categories: Category[];
   isLoading: boolean;
   error: string | null;
+  reload: () => void;
 };
 
 export function useGamesData({
@@ -21,57 +24,40 @@ export function useGamesData({
 }: UseGamesDataDependencies): UseGamesDataResult {
   const [games, setGames] = useState<Game[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-   useEffect(() => {
-    let isCancelled = false;
-
-    async function loadGamesData() {
+   const reload = useCallback(async () => {
+    try {
       setIsLoading(true);
       setError(null);
-      try {
-        const [gamesData, categoriesData] =
-          await Promise.all([
-            fetchGames(),
-            fetchCategories(),
-          ]);
 
-        if (isCancelled) {
-          return;
-        }
+      const [gamesData, categoriesData] = await Promise.all([
+        fetchGames(),
+        fetchCategories(),
+      ]);
 
-        setGames(gamesData);
-        setCategories(categoriesData);
-      } catch (error) {
-        if (isCancelled) {
-          return;
-        }
+      setGames(gamesData);
+      setCategories(categoriesData);
+    } catch (error) {
+      setError(
+       getErrorMessage(error,"We could not load the games."),
+      );
+    } finally {
+      setIsLoading(false)
 
-        setError(
-          error instanceof Error
-            ? error.message
-            : "We could not load the games.",
-        );
-      } finally {
-        if (!isCancelled) {
-          setIsLoading(false);
-        }
-      }
     }
+  }, []);
 
-    void loadGamesData();
-
-    return () => {
-      isCancelled = true;
-    };
-  }, [fetchGames, fetchCategories]);
-
+  useEffect(() => {
+    void reload();
+     }, [reload]);
 
   return {
     games,
     categories,
     isLoading,
     error,
+    reload,
   };
 }

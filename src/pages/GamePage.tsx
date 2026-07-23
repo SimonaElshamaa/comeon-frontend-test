@@ -1,24 +1,64 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+
+import { getGames } from "../api/casinoApi/gamesApi";
+
+import { useGameValidation } from "../hooks/useGameValidation";
 
 import { Header } from "../components/Header";
 import { LogoutButton } from "../components/LogoutButton";
 import { PlayerProfile } from "../components/PlayerProfile";
+
 import "./GamePage.css";
+import { ErrorMessage } from "../components/ErrorMessage";
+import { LoadingState } from "../components/LoadingState";
+
 export  function GamePage() {
   const { gameCode } = useParams();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!gameCode) return;
+  const {
+    game,
+    isLoading,
+    isNotFound,
+    error: validationError,
+    reload,
+  } = useGameValidation(gameCode, {
+    fetchGames: getGames,
+  });
 
-    comeon.game.launch(gameCode);
+  const [launchError, setLaunchError] =
+    useState<string | null>(null);
+  const [launchAttempt, setLaunchAttempt] = useState(0);
+
+  useEffect(() => {
+    if (!game) {
+      return;
+    }
+    const gameContainer =
+      document.getElementById("game-launch");
+
+    setLaunchError(null);
+
+    try {
+      gameContainer?.replaceChildren();
+      comeon.game.launch(game.code);
+    } catch {
+      setLaunchError(
+        "The game could not be started. Please try again.",
+      );
+    }
+
     return () => {
-    // Clean up the game container to prevent the previous game from remaining mounted.
-    document.getElementById("game-launch")?.replaceChildren();
-  };
-    
-  }, [gameCode]);
+      gameContainer?.replaceChildren();
+    };
+  }, [game, launchAttempt]);
+
+  function retryLaunch() {
+    setLaunchAttempt(
+      (currentAttempt) => currentAttempt + 1,
+    );
+  }
 
   return (
      <main className="game-page">
@@ -44,11 +84,29 @@ export  function GamePage() {
           </div>
          
         </div>
+        {isLoading && (
+          <LoadingState />
+        )}
 
-        <div
-          id="game-launch"
-          className="game-launch"
-        />
+        {validationError && (
+          <div role="alert">
+            <ErrorMessage message={validationError} onRetry={reload} />
+          </div>
+        )}
+
+        {isNotFound && (
+          <ErrorMessage message="The requested game could not be found." />
+        )}
+
+        {game && (
+          <>
+            {launchError && (<ErrorMessage message={launchError} onRetry={retryLaunch} />)}
+            <div
+              id="game-launch"
+              aria-label={`${game.name} game area`}
+            />
+          </>
+        )}
       </section>
     </main>
   );

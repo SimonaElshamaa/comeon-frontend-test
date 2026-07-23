@@ -1,5 +1,6 @@
 import { useState, type SyntheticEvent } from "react";
 import type { LoginCredentials } from "../types/auth";
+import { ErrorMessage } from "./ErrorMessage";
 
 type LoginFormProps = {
   onSubmit: (credentials: LoginCredentials) => Promise<void>;
@@ -32,10 +33,9 @@ export function LoginForm({
 
   return (
     <form className="ui form login-form" onSubmit={handleSubmit}>
+
       {error && (
-        <div className="ui negative message" role="alert">
-          {error}
-        </div>
+        <ErrorMessage message={error} />
       )}
 
       <div className="required field">

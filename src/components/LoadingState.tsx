@@ -7,7 +7,7 @@ export function LoadingState() {
     aria-label="Loading games"
   >
     <div className="ui active centered inline text loader">
-      Loading games
+      Loading...
     </div>
   </section>);
 }

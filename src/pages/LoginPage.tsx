@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 
+import { getErrorMessage } from "../api/getErrorMessage";
 
 import { LoginForm } from "../components/LoginForm";
 import { useAuth } from "../auth/useAuth";
@@ -31,9 +32,10 @@ export function LoginPage() {
       navigate("/games", { replace: true });
     } catch (error) {
       setError(
-        error instanceof Error
-          ? error.message
-          : "An unexpected error occurred.",
+        getErrorMessage(
+        error,
+        "An unexpected error occurred. Please try again.",
+      ),
       );
     } finally {
       setIsLoading(false);
