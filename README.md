@@ -8,26 +8,21 @@ The application supports authentication, protected routes, game browsing, URL-ba
 ### Login
 
 <p align="center">
-  <img src="public/images/LoginPageImage.png" width="700" alt="Login page">
+  <img src="public/images/LoginPageImage.png" width="500" alt="Login page">
 </p>
 
 ### Games
 
 <p align="center">
-  <img src="public/images/GamesPageImage.png" width="700" alt="Games page">
+  <img src="public/images/GamesPageImage.png" width="500" alt="Games page">
 </p>
 
 ### Games
 
 <p align="center">
-  <img src="public/images/GamePageImage.png" width="700" alt="Games page">
+  <img src="public/images/GamePageImage.png" width="500" alt="Games page">
 </p>
 
-
-
-<p align="center">
-  <img src="docs/games-page.png" width="700" alt="Games page">
-</p>
 
 ## Features
 
