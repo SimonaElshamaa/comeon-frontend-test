@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import {
   MemoryRouter,
@@ -47,18 +47,32 @@ const games: Game[] = [
   {
     code: "starburst",
     name: "Starburst",
-    description: "A colourful slot game",
+    description: "A colourful space slot game",
     icon: "/images/starburst.jpg",
     categoryIds: [1],
+  },
+  {
+    code: "book-of-ra",
+    name: "Book of Ra",
+    description: "Explore an ancient Egyptian adventure",
+    icon: "/images/book-of-ra.jpg",
+    categoryIds: [1, 2],
+  },
+  {
+    code: "blackjack",
+    name: "Blackjack",
+    description: "Classic casino card game",
+    icon: "/images/blackjack.jpg",
+    categoryIds: [2],
   },
 ];
 
 const categories: Category[] = [
-  {
-    id: 1,
-    name: "Slots",
-  },
+  { id: 1, name: "Slots" },
+  { id: 2, name: "Table games" },
 ];
+
+
 
 function OpenedGame() {
   const { gameCode } = useParams();
@@ -88,12 +102,82 @@ describe("GamesPage", () => {
   beforeEach(() => {
     vi.clearAllMocks();
 
+    vi.mocked(getGames).mockResolvedValue(games);
     vi.mocked(getCategories).mockResolvedValue(
       categories,
     );
   });
 
   it("opens the correct game route when Play is clicked", async () => {
+    const user = userEvent.setup();
+
+    vi.mocked(getGames).mockResolvedValueOnce(games);
+
+    renderGamesPage();
+
+      const starburstHeading =
+    await screen.findByRole("heading", {
+      name: "Starburst",
+    });
+
+  const gameCard =
+    starburstHeading.closest("article");
+
+  expect(gameCard).not.toBeNull();
+
+  await user.click(
+    within(gameCard as HTMLElement).getByRole(
+      "button",
+      {
+        name: /play/i,
+      },
+    ),
+  );
+
+   expect(
+    await screen.findByRole("heading", {
+      name: /opened game:\s*starburst/i,
+    }),
+  ).toBeInTheDocument();
+});
+
+  it("filters games by search text", async () => {
+    const user = userEvent.setup();
+
+    renderGamesPage();
+
+    expect(
+      await screen.findByRole("heading", {
+        name: "Starburst",
+      }),
+    ).toBeInTheDocument();
+
+    const searchInput = screen.getByRole("searchbox", {
+      name: "Search games",
+    });
+
+    await user.type(searchInput, "book");
+
+    expect(
+      screen.getByRole("heading", {
+        name: "Book of Ra",
+      }),
+    ).toBeInTheDocument();
+
+    expect(
+      screen.queryByRole("heading", {
+        name: "Starburst",
+      }),
+    ).not.toBeInTheDocument();
+
+    expect(
+      screen.queryByRole("heading", {
+        name: "Blackjack",
+      }),
+    ).not.toBeInTheDocument();
+  });
+
+  it("combines search and category filters", async () => {
     const user = userEvent.setup();
 
     vi.mocked(getGames).mockResolvedValueOnce(games);
@@ -108,14 +192,65 @@ describe("GamesPage", () => {
 
     await user.click(
       screen.getByRole("button", {
-        name: /play/i,
+        name: /table games/i,
       }),
     );
 
+    await user.type(
+      screen.getByRole("searchbox"),
+      "book",
+    );
+
     expect(
-      await screen.findByRole("heading", {
-        name: /opened game: starburst/i,
+      screen.getByRole("heading", {
+        name: "Book of Ra",
       }),
+    ).toBeInTheDocument();
+
+    expect(
+      screen.queryByRole("heading", {
+        name: "Blackjack",
+      }),
+    ).not.toBeInTheDocument();
+
+    expect(
+      screen.queryByRole("heading", {
+        name: "Starburst",
+      }),
+    ).not.toBeInTheDocument();
+  });
+
+  it("shows an error when games cannot be loaded", async () => {
+    vi.mocked(getGames).mockRejectedValueOnce(
+      new Error("Unable to load games."),
+    );
+
+    renderGamesPage();
+
+    expect(
+      await screen.findByRole("alert"),
+    ).toHaveTextContent("Unable to load games.");
+
+    expect(
+      screen.queryByRole("heading", {
+        name: "Starburst",
+      }),
+    ).not.toBeInTheDocument();
+  });
+
+  it("shows a loading state while data is being fetched", () => {
+    vi.mocked(getGames).mockReturnValue(
+      new Promise(() => {}),
+    );
+
+    vi.mocked(getCategories).mockReturnValue(
+      new Promise(() => {}),
+    );
+
+    renderGamesPage();
+
+    expect(
+      screen.getByText(/loading.../i),
     ).toBeInTheDocument();
   });
 });
