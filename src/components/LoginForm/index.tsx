@@ -1,6 +1,7 @@
 import { useState, type SyntheticEvent } from "react";
-import type { LoginCredentials } from "../types/auth";
-import { ErrorMessage } from "./ErrorMessage";
+import type { LoginCredentials } from "../../types/auth";
+import { ErrorMessage } from "../ErrorMessage";
+import "./StyleSheet.css";
 
 type LoginFormProps = {
   onSubmit: (credentials: LoginCredentials) => Promise<void>;

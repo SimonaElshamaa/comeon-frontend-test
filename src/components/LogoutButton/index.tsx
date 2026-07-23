@@ -1,7 +1,8 @@
 import {useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { useAuth } from "../auth/useAuth";
+import { useAuth } from "../../auth/useAuth";
+import "./StyleSheet.css";
 
 export function LogoutButton() {
   const { logout,player } = useAuth();

@@ -1,5 +1,6 @@
-import type { Game } from "../types/game";
-import { GameCard } from "./GameCard";
+import type { Game } from "../../types/game";
+import { GameCard } from "../GameCard";
+import "./StyleSheet.css";
 
 type GamesListProps = {
   games: Game[];

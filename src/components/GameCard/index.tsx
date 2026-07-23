@@ -1,4 +1,5 @@
-import type { Game } from "../types/game";
+import type { Game } from "../../types/game";
+import "./StyleSheet.css";
 
 type GameCardProps = {
    game: Game;

@@ -9,20 +9,6 @@
   background: #444;
 }
 
-.login-header {
-  display: flex;
-  width: 100%;
-  max-width: 100%;
-  justify-content: center;
-  margin-bottom: 32px;
-}
-
-.login-logo {
-  width: min(320px, 70vw);
-  max-width: 100%;
-  height: auto;
-}
-
 .login-panel {
   display: flex;
   width: min(1190px, 100%);
@@ -36,49 +22,13 @@
   background: #fff;
 }
 
-.login-form {
-  width: min(250px, 100%);
-  min-width: 0;
-}
-
-.ui.form.login-form .field {
-  width: 100%;
-  margin: 0 0 12px;
-}
-
-.ui.form.login-form .input {
-  width: 100%;
-  min-width: 0;
-}
-
-.ui.form.login-form input {
-  width: 100%;
-  min-width: 0;
-  height: 46px;
-}
-
-.login-button {
-  display: block !important;
-  max-width: 100%;
-  margin: 12px auto 0 !important;
-}
-
 @media (max-width: 600px) {
   .login-page {
     padding: 24px 12px;
   }
 
-  .login-header {
-    margin-bottom: 24px;
-  }
-
   .login-panel {
     min-height: 260px;
     padding: 30px 16px;
-  }
-
-  .login-form {
-    width: 100%;
-    max-width: 290px;
   }
 }

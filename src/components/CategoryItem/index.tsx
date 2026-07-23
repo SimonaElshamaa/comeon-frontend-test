@@ -1,4 +1,5 @@
-import type { Category } from "../types/category";
+import type { Category } from "../../types/category";
+import "./StyleSheet.css"
 
 type CategoryItemProps = {
   onSelect: (value: number) => void;

@@ -1,0 +1,10 @@
+.games-section,
+.games-list {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+.empty-games-message {
+  max-width: 100%;
+  margin-top: 30px !important;
+}

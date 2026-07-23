@@ -1,4 +1,5 @@
-import { useAuth } from "../auth/useAuth";
+import { useAuth } from "../../auth/useAuth";
+import "./StyleSheet.css";
 
 export function PlayerProfile() {
 const { player } = useAuth();

@@ -1,3 +1,5 @@
+import "./StyleSheet.css";
+
 export function Header() {
 
 return(

@@ -1,0 +1,16 @@
+
+.logout-button {
+  min-width: 174px;
+  min-height: 52px;
+  max-width: 100%;
+  margin-top: 24px !important;
+  font-size: 19px !important;
+  font-weight: 700 !important;
+}
+
+@media (max-width: 560px) {
+ .logout-button {
+    width: 100%;
+    min-width: 0;
+  }
+}

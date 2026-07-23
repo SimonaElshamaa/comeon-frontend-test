@@ -1,5 +1,6 @@
-import type { Category } from "../types/category";
-import { CategoryItem } from "./CategoryItem";
+import type { Category } from "../../types/category";
+import { CategoryItem } from "../CategoryItem";
+import "./StyleSheet.css";
 
 type CategoryListProps = {
   categories: Category[];

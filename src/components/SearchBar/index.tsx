@@ -1,3 +1,5 @@
+import "./styleSheet.css";
+
 type SearchBarProps = {
   value: string;
   onChange: (value: string) => void;
